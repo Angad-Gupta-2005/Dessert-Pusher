@@ -8,16 +8,17 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import com.angad.dessertpusher.databinding.ActivityMainBinding
+import timber.log.Timber
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     private var revenue = 0
     private var dessertsSold = 0
+    private lateinit var dessertTimer: DessertTimer
 
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
@@ -55,12 +56,15 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+         Timber.i("onCreate method called")
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }
+
+        dessertTimer = DessertTimer(this.lifecycle)
 
         // Set the TextViews to the right values
         binding.revenue = revenue
@@ -141,10 +145,35 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return super.onOptionsItemSelected(item)
 }
 
-//        setContentView(R.layout.activity_main)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
+    override fun onStart() {
+        super.onStart()
+        Timber.i(  "onStart method called")
+//        dessertTimer.startTimer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.i("onResume called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Timber.i("onStop called")
+//        dessertTimer.stopTimer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.i("onDestroy called")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Timber.i("onRestart called")
+    }
 }
